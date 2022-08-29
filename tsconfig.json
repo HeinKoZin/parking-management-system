@@ -34,7 +34,9 @@
 			"@controllers/*": ["controllers/*"],
 			"@repositories/*": ["repositories/*"],
 			"@services/*": ["services/*"],
-			"@routes/*": ["routes/*"]
+			"@routes/*": ["routes/*"],
+			"@dtos/*": ["dtos/*"],
+			"@models/*": ["models/*"]
 		},
 		"moduleResolution": "node",
 		/* Specify a set of entries that re-map imports to additional lookup locations. */ // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */

@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { getTest } from "@controllers/test.controller";
+import userRouter from "./users";
 
 const router = Router();
 
-router.get("/router-test", getTest);
+router.use("/users", userRouter);
 
 export { router };

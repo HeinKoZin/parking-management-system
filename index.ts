@@ -1,15 +1,16 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { router } from "./routes";
+import bodyParser from "body-parser";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
 
-// app.get("/", (req: Request, res: Response) => {
-// 	res.send("Express + TypeScript Server");
-// });
+var jsonParser = bodyParser.json();
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use("/", router);
 

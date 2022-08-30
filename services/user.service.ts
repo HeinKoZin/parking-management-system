@@ -7,6 +7,7 @@ import {
 	searchUser,
 	updateUser,
 } from "@repositories/user.repository";
+import bcrypt from "bcrypt";
 
 export const users = async (
 	keyword?: string,
@@ -17,6 +18,8 @@ export const users = async (
 };
 
 export const create = async (user: CreateUserInput) => {
+	const salt = await bcrypt.genSalt(10);
+	user.password = await bcrypt.hash(user.password, salt);
 	const create = await createUser(user);
 	return create;
 };
@@ -30,9 +33,4 @@ export const remove = async (userId: number) => {
 	const remove = await deleteUser(userId);
 
 	return remove;
-};
-
-export const search = async (keyword: string) => {
-	const search = await searchUser(keyword);
-	return search;
 };

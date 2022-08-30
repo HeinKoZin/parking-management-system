@@ -1,10 +1,10 @@
 import { UserModel } from "@models/user";
-import { create, remove, search, update, users } from "@services/user.service";
-import { json } from "body-parser";
+import { create, remove, update, users } from "@services/user.service";
 import { Request, Response } from "express";
 
 export const getAllUsers = async (req: Request, res: Response) => {
 	const { keyword, limit = 20, page = 1 } = req.query;
+
 	const allUsers = await users(
 		keyword?.toString(),
 		parseInt(limit.toString()),

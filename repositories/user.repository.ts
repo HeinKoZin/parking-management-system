@@ -46,28 +46,6 @@ export const allUsers = async (
 		  };
 };
 
-export const searchUser = async (keyword: string) => {
-	const searchedUsers = await prismaService.user.findMany({
-		where: {
-			OR: [{ email: { contains: keyword } }, { name: { contains: keyword } }],
-		},
-	});
-
-	if (!searchedUsers) {
-		return {
-			success: false,
-			message: "No users found!",
-			data: searchedUsers,
-		};
-	}
-
-	return {
-		success: true,
-		message: "Users found.",
-		data: searchedUsers,
-	};
-};
-
 export const getUser = async (userId?: number, userEmail?: string) => {
 	const user = await prismaService.user.findUnique({
 		where: {
@@ -79,8 +57,8 @@ export const getUser = async (userId?: number, userEmail?: string) => {
 	return user;
 };
 
-export const createUser = async (user: CreateUserInput) => {
-	const existingUser = await getUser(undefined, user.email);
+export const createUser = async (data: CreateUserInput) => {
+	const existingUser = await getUser(undefined, data.email);
 
 	if (existingUser) {
 		return {
@@ -91,7 +69,7 @@ export const createUser = async (user: CreateUserInput) => {
 
 	try {
 		const createUser = await prismaService.user.create({
-			data: user,
+			data,
 		});
 		if (createUser) {
 			return {
@@ -107,7 +85,7 @@ export const createUser = async (user: CreateUserInput) => {
 	}
 };
 
-export const updateUser = async (userId: number, user: UpdateUserInput) => {
+export const updateUser = async (userId: number, data: UpdateUserInput) => {
 	const existingUser = await getUser(userId);
 
 	if (!existingUser) {
@@ -123,7 +101,7 @@ export const updateUser = async (userId: number, user: UpdateUserInput) => {
 				id: userId,
 			},
 			data: {
-				...user,
+				...data,
 			},
 		});
 

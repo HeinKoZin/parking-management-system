@@ -4,7 +4,6 @@ import {
 	allUsers,
 	createUser,
 	deleteUser,
-	searchUser,
 	updateUser,
 } from "@repositories/user.repository";
 import bcrypt from "bcrypt";

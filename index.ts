@@ -2,15 +2,18 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { router } from "./routes";
 import bodyParser from "body-parser";
+import formData from "express-form-data";
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
 
-var jsonParser = bodyParser.json();
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+// in latest body-parser use like below.
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(formData.parse());
 
 app.use("/", router);
 

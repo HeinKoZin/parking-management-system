@@ -1,14 +1,17 @@
-import { createUser, getAllUsers } from "@controllers/user.controller";
+import {
+	createUser,
+	deleteUser,
+	getAllUsers,
+	updateUser,
+} from "@controllers/user.controller";
 import bodyParser from "body-parser";
 import { Router } from "express";
 
 const userRouter = Router();
 
-var jsonParser = bodyParser.json();
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-
 userRouter.get("/", getAllUsers);
-userRouter.post("/", urlencodedParser, createUser);
+userRouter.post("/", createUser);
+userRouter.patch("/:id", updateUser);
+userRouter.delete("/:id", deleteUser);
 
 export default userRouter;

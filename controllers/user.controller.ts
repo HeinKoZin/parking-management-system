@@ -1,14 +1,20 @@
 import { UserModel } from "@models/user";
-import { create, users } from "@services/user.service";
+import { create, remove, search, update, users } from "@services/user.service";
+import { json } from "body-parser";
 import { Request, Response } from "express";
 
-const getAllUsers = async (req: Request, res: Response) => {
-	const allUsers = await users();
+export const getAllUsers = async (req: Request, res: Response) => {
+	const { keyword, limit = 20, page = 1 } = req.query;
+	const allUsers = await users(
+		keyword?.toString(),
+		parseInt(limit.toString()),
+		parseInt(page.toString())
+	);
 
 	res.json(allUsers);
 };
 
-const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response) => {
 	try {
 		const input = UserModel.parse(req.body);
 
@@ -19,4 +25,31 @@ const createUser = async (req: Request, res: Response) => {
 	}
 };
 
-export { getAllUsers, createUser };
+export const updateUser = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		const input = req.body;
+		const user = await update(parseInt(id), input);
+		res.json(user);
+	} catch (error) {
+		res.json(error);
+	}
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		const user = await remove(parseInt(id));
+		res.json(user);
+	} catch (error) {
+		res.json(error);
+	}
+};
+
+// export const searchUser = async (req: Request, res: Response) => {
+// 	try {
+// 		const { keyword } = req.query;
+// 		const users = await search(keyword?.toString());
+// 		res.json(users);
+// 	} catch (error) {}
+// };

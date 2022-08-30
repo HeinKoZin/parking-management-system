@@ -57,10 +57,13 @@ enum UserRole {
 }
 
 model Customer {
+  /// @zod.optional()
   id    Int    @id @default(autoincrement())
   name  String
   email String @unique
+  /// @zod.optional()
   createdAt DateTime @default(now()) @db.Timestamp(6)
+  /// @zod.optional()
   updatedAt DateTime @updatedAt
 
   @@index([id, email])

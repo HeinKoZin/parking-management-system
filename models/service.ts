@@ -4,6 +4,7 @@ import { CompleteBookingService, RelatedBookingServiceModel } from "./index"
 export const ServiceModel = z.object({
   id: z.number().int(),
   name: z.string(),
+  fee: z.number().int(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })

@@ -3,20 +3,27 @@ import { UpdateServiceInput } from "@dtos/service/update_service.input";
 import prismaService from "@services/prisma.service";
 
 export const getAllServices = async () => {
-	const services = await prismaService.service.findMany({});
+	try {
+		const services = await prismaService.service.findMany({});
 
-	if (services.length === 0) {
+		if (services.length === 0) {
+			return {
+				success: true,
+				message: "No services found!.",
+			};
+		}
+
 		return {
 			success: true,
-			message: "No services found!.",
+			message: "All services successfully retrieved.",
+			data: services,
+		};
+	} catch (error) {
+		return {
+			success: false,
+			message: error,
 		};
 	}
-
-	return {
-		success: true,
-		message: "All services successfully retrieved.",
-		data: services,
-	};
 };
 
 export const createService = async (data: CreateServiceInput) => {
@@ -47,7 +54,9 @@ export const updateService = async (
 			where: {
 				id: serviceId,
 			},
-			data,
+			data: {
+				...data,
+			},
 		});
 
 		return {

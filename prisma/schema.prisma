@@ -10,22 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 generator zod {
-  provider                 = "zod-prisma"
-  output                   = "../models" // (default) the directory where generated zod schemas will be saved
+  provider = "zod-prisma"
+  output   = "../models" // (default) the directory where generated zod schemas will be saved
 
-  relationModel            = true // (default) Create and export both plain and related models.
+  relationModel = true // (default) Create and export both plain and related models.
   // relationModel         = "default" // Do not export model without relations.
   // relationModel         = false // Do not generate related model
 
-  modelCase                = "PascalCase" // (default) Output models using pascal case (ex. UserModel, PostModel)
+  modelCase = "PascalCase" // (default) Output models using pascal case (ex. UserModel, PostModel)
   // modelCase             = "camelCase" // Output models using camel case (ex. userModel, postModel)
 
-  modelSuffix              = "Model" // (default) Suffix to apply to your prisma models when naming Zod schemas
+  modelSuffix = "Model" // (default) Suffix to apply to your prisma models when naming Zod schemas
 
   // useDecimalJs          = false // (default) represent the prisma Decimal type using as a JS number
-  useDecimalJs             = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
+  useDecimalJs = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
 
   // imports                  = null // (default) will import the referenced file in generated schemas to be used via imports.someExportedVariable
 
@@ -58,24 +57,26 @@ enum UserRole {
 
 model Customer {
   /// @zod.optional()
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
   /// @zod.optional()
-  createdAt DateTime @default(now()) @db.Timestamp(6)
+  createdAt DateTime  @default(now()) @db.Timestamp(6)
   /// @zod.optional()
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime  @updatedAt
+  bookings   Booking[]
 
   @@index([id, email])
   @@map("customers")
 }
 
 model Service {
-  id   Int    @id @default(autoincrement())
-  name String
-  bookings BookingService[]
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  updatedAt DateTime @updatedAt
+  id        Int              @id @default(autoincrement())
+  name      String
+  fee       Int
+  bookings  BookingService[]
+  createdAt DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt DateTime         @updatedAt
 
   @@index([id])
   @@map("services")
@@ -85,23 +86,27 @@ model Booking {
   id         Int              @id @default(autoincrement())
   parkingFee Int
   duration   Int
+  customer   Customer         @relation(fields: [customerId], references: [id])
   services   BookingService[]
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  updatedAt DateTime @updatedAt
+  car_no     String
+  note       String?
+  createdAt  DateTime         @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime         @updatedAt
+  customerId Int
 
-  @@map("bookings")
   @@index([id])
+  @@map("bookings")
 }
 
 model BookingService {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   bookingId Int
   serviceId Int
-  Booking   Booking @relation(fields: [bookingId], references: [id])
-  Service Service @relation(fields: [serviceId], references: [id])
+  Booking   Booking  @relation(fields: [bookingId], references: [id])
+  Service   Service  @relation(fields: [serviceId], references: [id])
   createdAt DateTime @default(now()) @db.Timestamp(6)
   updatedAt DateTime @updatedAt
 
-  @@map("booking_service")
   @@index([id])
+  @@map("booking_service")
 }

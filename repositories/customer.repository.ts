@@ -1,4 +1,5 @@
 import { CreateCustomerInputInterface } from "@dtos/customer/create_customer.input";
+import { UpdateCustomerInputInterface } from "@dtos/customer/update_customer.input";
 import { SearchByKeywordInput } from "@dtos/search_by_keyword.input";
 import prismaService from "@services/prisma.service";
 
@@ -76,7 +77,7 @@ export const getCustomer = async (
 
 export const updateCustomer = async (
 	customerId: number,
-	data: CreateCustomerInputInterface
+	data: UpdateCustomerInputInterface
 ) => {
 	const existingCustomer = await getCustomer(customerId);
 
@@ -108,6 +109,13 @@ export const updateCustomer = async (
 };
 
 export const deleteCustomer = async (customerId: number) => {
+	const existingCustomer = await getCustomer(customerId);
+	if (!existingCustomer) {
+		return {
+			success: false,
+			message: "No customer found!",
+		};
+	}
 	try {
 		const deletedCustomer = await prismaService.customer.delete({
 			where: {

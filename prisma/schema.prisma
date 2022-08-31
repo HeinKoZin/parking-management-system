@@ -33,6 +33,10 @@ generator zod {
   // prismaJsonNullability = false // allows null assignment to optional JSON fields
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 model User {
   /// @zod.optional()
   id        Int      @id @default(autoincrement())

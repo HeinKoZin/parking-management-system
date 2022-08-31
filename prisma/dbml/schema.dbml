@@ -1,0 +1,65 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table users {
+  id Int [pk, increment, note: '@zod.optional()']
+  name String [not null]
+  email String [unique, not null]
+  password String [not null]
+  role UserRole [not null, default: 'USER', note: '@zod.optional()']
+  createdAt DateTime [default: `now()`, not null, note: '@zod.optional()']
+  updatedAt DateTime [not null, note: '@zod.optional()']
+}
+
+Table customers {
+  id Int [pk, increment, note: '@zod.optional()']
+  name String [not null]
+  email String [unique, not null]
+  createdAt DateTime [default: `now()`, not null, note: '@zod.optional()']
+  updatedAt DateTime [not null, note: '@zod.optional()']
+  bookings bookings [not null]
+}
+
+Table services {
+  id Int [pk, increment]
+  name String [not null]
+  fee Int [not null]
+  bookings booking_service [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table bookings {
+  id Int [pk, increment, note: '@zod.optional()']
+  parking_fee Int [not null]
+  duration Int [not null]
+  customer customers [not null]
+  services booking_service [not null]
+  car_no String [not null]
+  note String [note: '@zod.optional()']
+  createdAt DateTime [default: `now()`, not null, note: '@zod.optional()']
+  updatedAt DateTime [not null, note: '@zod.optional()']
+  customer_id Int [not null]
+}
+
+Table booking_service {
+  id Int [pk, increment]
+  bookingId Int [not null]
+  serviceId Int [not null]
+  Booking bookings [not null]
+  Service services [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Enum UserRole {
+  ADMIN
+  USER
+}
+
+Ref: bookings.customer_id > customers.id
+
+Ref: booking_service.bookingId > bookings.id
+
+Ref: booking_service.serviceId > services.id

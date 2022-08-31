@@ -83,16 +83,20 @@ model Service {
 }
 
 model Booking {
+  /// @zod.optional()
   id         Int              @id @default(autoincrement())
-  parkingFee Int
+  parking_fee Int
   duration   Int
-  customer   Customer         @relation(fields: [customerId], references: [id])
+  customer   Customer         @relation(fields: [customer_id], references: [id])
   services   BookingService[]
   car_no     String
+  /// @zod.optional()
   note       String?
+  /// @zod.optional()
   createdAt  DateTime         @default(now()) @db.Timestamp(6)
+  /// @zod.optional()
   updatedAt  DateTime         @updatedAt
-  customerId Int
+  customer_id Int
 
   @@index([id])
   @@map("bookings")

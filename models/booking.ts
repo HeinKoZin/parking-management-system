@@ -2,14 +2,14 @@ import * as z from "zod"
 import { CompleteCustomer, RelatedCustomerModel, CompleteBookingService, RelatedBookingServiceModel } from "./index"
 
 export const BookingModel = z.object({
-  id: z.number().int(),
-  parkingFee: z.number().int(),
+  id: z.number().int().optional(),
+  parking_fee: z.number().int(),
   duration: z.number().int(),
   car_no: z.string(),
-  note: z.string().nullish(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  customerId: z.number().int(),
+  note: z.string().optional().nullish(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+  customer_id: z.number().int(),
 })
 
 export interface CompleteBooking extends z.infer<typeof BookingModel> {
